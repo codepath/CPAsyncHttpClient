@@ -3,7 +3,7 @@ package com.codepath.asynchttpclient.callback;
 import android.os.Handler;
 import android.os.Looper;
 
-import com.codepath.asynchttpclient.AbcCallback;
+import com.codepath.asynchttpclient.AbsCallback;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
@@ -18,7 +18,7 @@ import okhttp3.Headers;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 
-public abstract class AsyncJsonCallback implements AbcCallback {
+public abstract class AsyncJsonCallback implements AbsCallback {
 
     public abstract void onSuccess(int statusCode, Headers headers, JSON json);
 

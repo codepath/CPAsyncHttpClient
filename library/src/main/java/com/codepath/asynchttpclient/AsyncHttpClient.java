@@ -38,18 +38,18 @@ public class AsyncHttpClient {
         return requestBuilder;
     }
 
-    public void get(String url, HashMap<String, String> requestHeaders, AbcCallback callback) {
+    public void get(String url, HashMap<String, String> requestHeaders, AbsCallback callback) {
         Request.Builder requestBuilder = createBuilderWithHeaders(url, requestHeaders);
         Request request = requestBuilder.build();
 
         okHttpClient.newCall(request).enqueue(callback);
     }
 
-    public void get(String url, AbcCallback callback) {
+    public void get(String url, AbsCallback callback) {
         get(url, null, callback);
     }
 
-    public void post(String url, HashMap<String, String> requestHeaders, String body, AbcCallback callback) {
+    public void post(String url, HashMap<String, String> requestHeaders, String body, AbsCallback callback) {
         Request.Builder requestBuilder = createBuilderWithHeaders(url, requestHeaders);
 
         RequestBody requestBody = RequestBody.create(MEDIA_TYPE_JSON, body);
@@ -59,7 +59,7 @@ public class AsyncHttpClient {
     }
 
 
-    public void post(String url, HashMap<String, String> requestHeaders, File file, AbcCallback callback) {
+    public void post(String url, HashMap<String, String> requestHeaders, File file, AbsCallback callback) {
         Request.Builder requestBuilder = createBuilderWithHeaders(url, requestHeaders);
 
         RequestBody requestBody = RequestBody.create(MEDIA_TYPE_JSON, file);
