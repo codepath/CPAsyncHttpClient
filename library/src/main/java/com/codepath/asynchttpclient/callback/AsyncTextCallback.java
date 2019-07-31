@@ -3,6 +3,8 @@ package com.codepath.asynchttpclient.callback;
 import android.os.Handler;
 import android.os.Looper;
 
+import androidx.annotation.Nullable;
+
 import com.codepath.asynchttpclient.AbsCallback;
 
 import org.jetbrains.annotations.NotNull;
@@ -28,18 +30,17 @@ public abstract class AsyncTextCallback implements AbsCallback {
     public void onResponse(@NotNull Call call, @NotNull final Response response)
             throws IOException {
 
+        final AsyncTextCallback handler = this;
+
         try (final ResponseBody responseBody = response.body()) {
 
             final int responseCode = response.code();
             final Headers responseHeaders = response.headers();
 
-            final AsyncTextCallback handler = this;
-
             Runnable runnable;
+            final String responseString = responseBody.string();
 
             if (response.isSuccessful()) {
-                final String responseString = responseBody.string();
-
                 runnable = new Runnable() {
                     @Override
                     public void run() {
@@ -50,18 +51,21 @@ public abstract class AsyncTextCallback implements AbsCallback {
                 runnable = new Runnable() {
                     @Override
                     public void run() {
-                        handler.onFailure(responseCode, responseHeaders, responseBody);
+                        handler.onFailure(responseCode, responseHeaders, responseString, null);
                     }
                 };
             }
 
             // run on main thread to keep things simple
             new Handler(Looper.getMainLooper()).post(runnable);
+        } catch (IOException e) {
+            handler.onFailure(500, null, "", e);
         }
     }
 
     public abstract void onSuccess(int statusCode, Headers headers, String response);
 
-    public abstract void onFailure(int statusCode, Headers headers, ResponseBody errorResponse);
+    public abstract void onFailure(int statusCode, @Nullable Headers headers, String errorResponse, @Nullable Throwable e);
+
 }
 
