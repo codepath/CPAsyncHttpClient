@@ -22,7 +22,7 @@ public class AsyncHttpClient {
         okHttpClient = new OkHttpClient.Builder().build();
     }
 
-    AsyncHttpClient(OkHttpClient client) {
+    public AsyncHttpClient(OkHttpClient client) {
         okHttpClient = client;
     }
 
