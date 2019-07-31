@@ -13,16 +13,16 @@ import okhttp3.RequestBody;
 
 // todo: pre/post events, progress events
 
-public class CPAsyncHttpClient {
+public class AsyncHttpClient {
 
     private OkHttpClient okHttpClient;
     public static MediaType MEDIA_TYPE_JSON = MediaType.parse("application/json");
 
-    public CPAsyncHttpClient() {
+    public AsyncHttpClient() {
         okHttpClient = new OkHttpClient.Builder().build();
     }
 
-    CPAsyncHttpClient(OkHttpClient client) {
+    AsyncHttpClient(OkHttpClient client) {
         okHttpClient = client;
     }
 
@@ -38,18 +38,18 @@ public class CPAsyncHttpClient {
         return requestBuilder;
     }
 
-    public void get(String url, HashMap<String, String> requestHeaders, CPAbsCallback callback) {
+    public void get(String url, HashMap<String, String> requestHeaders, AbcCallback callback) {
         Request.Builder requestBuilder = createBuilderWithHeaders(url, requestHeaders);
         Request request = requestBuilder.build();
 
         okHttpClient.newCall(request).enqueue(callback);
     }
 
-    public void get(String url, CPAbsCallback callback) {
+    public void get(String url, AbcCallback callback) {
         get(url, null, callback);
     }
 
-    public void post(String url, HashMap<String, String> requestHeaders, String body, CPAbsCallback callback) {
+    public void post(String url, HashMap<String, String> requestHeaders, String body, AbcCallback callback) {
         Request.Builder requestBuilder = createBuilderWithHeaders(url, requestHeaders);
 
         RequestBody requestBody = RequestBody.create(MEDIA_TYPE_JSON, body);
@@ -59,7 +59,7 @@ public class CPAsyncHttpClient {
     }
 
 
-    public void post(String url, HashMap<String, String> requestHeaders, File file, CPAbsCallback callback) {
+    public void post(String url, HashMap<String, String> requestHeaders, File file, AbcCallback callback) {
         Request.Builder requestBuilder = createBuilderWithHeaders(url, requestHeaders);
 
         RequestBody requestBody = RequestBody.create(MEDIA_TYPE_JSON, file);
@@ -67,4 +67,6 @@ public class CPAsyncHttpClient {
         Request request = requestBuilder.post(requestBody).build();
         okHttpClient.newCall(request).enqueue(callback);
     }
+
+
 }

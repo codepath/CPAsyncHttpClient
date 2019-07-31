@@ -6,9 +6,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
-import com.codepath.asynchttpclient.CPAsyncHttpClient;
-import com.codepath.asynchttpclient.callback.CPAsyncJsonCallback;
-import com.codepath.asynchttpclient.callback.CPAsyncTextCallback;
+import com.codepath.asynchttpclient.AsyncHttpClient;
+import com.codepath.asynchttpclient.callback.AsyncJsonCallback;
+import com.codepath.asynchttpclient.callback.AsyncTextCallback;
 
 import okhttp3.Headers;
 import okhttp3.ResponseBody;
@@ -22,8 +22,8 @@ public class TestActivity extends AppCompatActivity {
     }
 
     public void onTest(View view) {
-        CPAsyncHttpClient cp = new CPAsyncHttpClient();
-        cp.get("https://api.thecatapi.com/v1/images/search", new CPAsyncTextCallback() {
+        AsyncHttpClient cp = new AsyncHttpClient();
+        cp.get("https://api.thecatapi.com/v1/images/search", new AsyncTextCallback() {
             @Override
             public void onSuccess(int statusCode, Headers headers, String response) {
                 Log.d("DEBUG", response);
@@ -35,7 +35,7 @@ public class TestActivity extends AppCompatActivity {
             }
         });
 
-        cp.get("https://api.thecatapi.com/v1/images/search", new CPAsyncJsonCallback() {
+        cp.get("https://api.thecatapi.com/v1/images/search", new AsyncJsonCallback() {
             @Override
             public void onSuccess(int statusCode, Headers headers, JSON json) {
                 Log.d("DEBUG", json.toString());

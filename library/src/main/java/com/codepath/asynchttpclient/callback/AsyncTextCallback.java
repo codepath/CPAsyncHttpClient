@@ -3,7 +3,7 @@ package com.codepath.asynchttpclient.callback;
 import android.os.Handler;
 import android.os.Looper;
 
-import com.codepath.asynchttpclient.CPAbsCallback;
+import com.codepath.asynchttpclient.AbcCallback;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -14,9 +14,9 @@ import okhttp3.Headers;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 
-public abstract class CPAsyncTextCallback implements CPAbsCallback {
+public abstract class AsyncTextCallback implements AbcCallback {
 
-    public CPAsyncTextCallback() {
+    public AsyncTextCallback() {
     }
 
     @Override
@@ -33,7 +33,7 @@ public abstract class CPAsyncTextCallback implements CPAbsCallback {
             final int responseCode = response.code();
             final Headers responseHeaders = response.headers();
 
-            final CPAsyncTextCallback handler = this;
+            final AsyncTextCallback handler = this;
 
             Runnable runnable;
 

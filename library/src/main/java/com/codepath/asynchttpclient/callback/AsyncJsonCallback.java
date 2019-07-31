@@ -3,7 +3,7 @@ package com.codepath.asynchttpclient.callback;
 import android.os.Handler;
 import android.os.Looper;
 
-import com.codepath.asynchttpclient.CPAbsCallback;
+import com.codepath.asynchttpclient.AbcCallback;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
@@ -18,13 +18,13 @@ import okhttp3.Headers;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 
-public abstract class CPAsyncJsonCallback implements CPAbsCallback {
+public abstract class AsyncJsonCallback implements AbcCallback {
 
     public abstract void onSuccess(int statusCode, Headers headers, JSON json);
 
     public abstract void onFailure(int statusCode, Headers headers, Throwable errorResponse);
 
-    public CPAsyncJsonCallback() {
+    public AsyncJsonCallback() {
     }
 
     public class JSON {
@@ -46,7 +46,7 @@ public abstract class CPAsyncJsonCallback implements CPAbsCallback {
             final int responseCode = response.code();
             final Headers responseHeaders = response.headers();
 
-            final CPAsyncJsonCallback handler = this;
+            final AsyncJsonCallback handler = this;
 
             Runnable runnable;
 
