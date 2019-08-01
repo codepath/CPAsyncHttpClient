@@ -22,7 +22,7 @@ public abstract class AsyncJsonCallback implements AbsCallback {
 
     public abstract void onSuccess(int statusCode, Headers headers, JSON json);
 
-    public abstract void onFailure(int statusCode, Headers headers, Throwable errorResponse);
+    public abstract void onFailure(int statusCode, Headers headers, String response, Throwable errorResponse);
 
     public AsyncJsonCallback() {
     }
@@ -51,9 +51,10 @@ public abstract class AsyncJsonCallback implements AbsCallback {
             Runnable runnable;
 
             Handler loopHandler = new Handler(Looper.getMainLooper());
+            final String responseString = responseBody.string();
+
             if (response.isSuccessful()) {
                 try {
-                    String responseString = responseBody.string();
                     final Object jsonResponse = this.parseResponse(responseString);
 
                     // run on main thread to keep things simple
@@ -70,7 +71,7 @@ public abstract class AsyncJsonCallback implements AbsCallback {
                                 handler.onSuccess(responseCode, responseHeaders, json);
                             } else if (jsonResponse instanceof String) {
                                 // In RFC5179 a simple string value is not a valid JSON
-                                handler.onFailure(responseCode, responseHeaders, new JSONException(
+                                handler.onFailure(responseCode, responseHeaders, responseString, new JSONException(
                                         "Response cannot be parsed as JSON data" + jsonResponse));
                             }
                         }
@@ -79,7 +80,7 @@ public abstract class AsyncJsonCallback implements AbsCallback {
                     runnable = new Runnable() {
                         @Override
                         public void run() {
-                            handler.onFailure(responseCode, responseHeaders, null);
+                            handler.onFailure(responseCode, responseHeaders, responseString, null);
                         }
                     };
 
@@ -88,7 +89,7 @@ public abstract class AsyncJsonCallback implements AbsCallback {
                 runnable = new Runnable() {
                     @Override
                     public void run() {
-                        handler.onFailure(responseCode, responseHeaders,
+                        handler.onFailure(responseCode, responseHeaders, responseString,
                                 new IllegalStateException("Response failed"));
                     }
                 };
