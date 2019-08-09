@@ -6,6 +6,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
+import okhttp3.HttpUrl;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -39,6 +40,18 @@ public class AsyncHttpClient {
     }
 
     public void get(String url, HashMap<String, String> requestHeaders, AbsCallback callback) {
+        this.get(url, requestHeaders, null, callback);
+    }
+
+    public void get(String url, HashMap<String, String> requestHeaders, @Nullable RequestParams requestParams, AbsCallback callback) {
+        if (requestParams != null) {
+            HttpUrl.Builder httpBuider = HttpUrl.parse(url).newBuilder();
+            for (Map.Entry<String, String> param : requestParams.entrySet()) {
+                httpBuider.addQueryParameter(param.getKey(), param.getValue());
+            }
+                url = httpBuider.build().toString();
+        }
+
         Request.Builder requestBuilder = createBuilderWithHeaders(url, requestHeaders);
         Request request = requestBuilder.build();
 

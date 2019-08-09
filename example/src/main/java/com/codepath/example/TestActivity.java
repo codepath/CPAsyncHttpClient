@@ -1,5 +1,6 @@
 package com.codepath.example;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
@@ -30,7 +31,7 @@ public class TestActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(int statusCode, Headers headers, ResponseBody errorResponse) {
+            public void onFailure(int statusCode, @Nullable Headers headers, String errorResponse, @Nullable Throwable throwable) {
 
             }
         });
@@ -43,7 +44,7 @@ public class TestActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(int statusCode, Headers headers, Throwable errorResponse) {
+            public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
 
             }
         });
