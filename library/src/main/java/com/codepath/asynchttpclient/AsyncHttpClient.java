@@ -43,7 +43,7 @@ public class AsyncHttpClient {
         this.get(url, null, requestParams, callback);
     }
 
-    public void get(String url, HashMap<String, String> requestHeaders, @Nullable RequestParams requestParams, AbsCallback callback) {
+    public void get(String url, HashMap<String, String> requestHeaders, @Nullable RequestParams<String, String> requestParams, AbsCallback callback) {
         if (requestParams != null) {
             HttpUrl.Builder httpBuider = HttpUrl.parse(url).newBuilder();
             for (Map.Entry<String, String> param : requestParams.entrySet()) {
