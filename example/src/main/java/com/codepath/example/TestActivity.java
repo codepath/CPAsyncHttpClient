@@ -7,8 +7,8 @@ import android.util.Log;
 import android.view.View;
 
 import com.codepath.asynchttpclient.AsyncHttpClient;
-import com.codepath.asynchttpclient.callback.AsyncJsonCallback;
-import com.codepath.asynchttpclient.callback.AsyncTextCallback;
+import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
+import com.codepath.asynchttpclient.callback.TextHttpResponseHandler;
 
 import okhttp3.Headers;
 import okhttp3.ResponseBody;
@@ -23,7 +23,7 @@ public class TestActivity extends AppCompatActivity {
 
     public void onTest(View view) {
         AsyncHttpClient cp = new AsyncHttpClient();
-        cp.get("https://api.thecatapi.com/v1/images/search", new AsyncTextCallback() {
+        cp.get("https://api.thecatapi.com/v1/images/search", new TextHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Headers headers, String response) {
                 Log.d("DEBUG", response);
@@ -35,7 +35,7 @@ public class TestActivity extends AppCompatActivity {
             }
         });
 
-        cp.get("https://api.thecatapi.com/v1/images/search", new AsyncJsonCallback() {
+        cp.get("https://api.thecatapi.com/v1/images/search", new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Headers headers, JSON json) {
                 Log.d("DEBUG", json.toString());

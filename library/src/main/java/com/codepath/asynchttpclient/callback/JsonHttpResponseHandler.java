@@ -18,18 +18,23 @@ import okhttp3.Headers;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 
-public abstract class AsyncJsonCallback implements AbsCallback {
+public abstract class JsonHttpResponseHandler implements AbsCallback {
 
     public abstract void onSuccess(int statusCode, Headers headers, JSON json);
 
-    public abstract void onFailure(int statusCode, Headers headers, String response, Throwable errorResponse);
+    public abstract void onFailure(int statusCode, Headers headers, String response, Throwable throwable);
 
-    public AsyncJsonCallback() {
+    public JsonHttpResponseHandler() {
     }
 
     public class JSON {
         public JSONObject jsonObject;
         public JSONArray jsonArray;
+
+        @Override
+        public String toString() {
+            return String.format("jsonObject=%s, jsonArray=%s", jsonObject, jsonArray);
+        }
     }
 
     @Override
@@ -46,7 +51,7 @@ public abstract class AsyncJsonCallback implements AbsCallback {
             final int responseCode = response.code();
             final Headers responseHeaders = response.headers();
 
-            final AsyncJsonCallback handler = this;
+            final JsonHttpResponseHandler handler = this;
 
             Runnable runnable;
 

@@ -16,9 +16,9 @@ import okhttp3.Headers;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 
-public abstract class AsyncTextCallback implements AbsCallback {
+public abstract class TextHttpResponseHandler implements AbsCallback {
 
-    public AsyncTextCallback() {
+    public TextHttpResponseHandler() {
     }
 
     @Override
@@ -30,7 +30,7 @@ public abstract class AsyncTextCallback implements AbsCallback {
     public void onResponse(@NotNull Call call, @NotNull final Response response)
             throws IOException {
 
-        final AsyncTextCallback handler = this;
+        final TextHttpResponseHandler handler = this;
 
         try (final ResponseBody responseBody = response.body()) {
 
@@ -65,7 +65,7 @@ public abstract class AsyncTextCallback implements AbsCallback {
 
     public abstract void onSuccess(int statusCode, Headers headers, String response);
 
-    public abstract void onFailure(int statusCode, @Nullable Headers headers, String errorResponse, @Nullable Throwable e);
+    public abstract void onFailure(int statusCode, @Nullable Headers headers, String errorResponse, @Nullable Throwable throwable);
 
 }
 
