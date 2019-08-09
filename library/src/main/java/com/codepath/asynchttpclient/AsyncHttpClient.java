@@ -39,8 +39,8 @@ public class AsyncHttpClient {
         return requestBuilder;
     }
 
-    public void get(String url, HashMap<String, String> requestHeaders, AbsCallback callback) {
-        this.get(url, requestHeaders, null, callback);
+    public void get(String url, RequestParams requestParams, AbsCallback callback) {
+        this.get(url, null, requestParams, callback);
     }
 
     public void get(String url, HashMap<String, String> requestHeaders, @Nullable RequestParams requestParams, AbsCallback callback) {
