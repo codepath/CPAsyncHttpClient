@@ -1,17 +1,30 @@
 apply plugin: 'com.android.library'
 apply plugin: 'com.github.dcendents.android-maven'
+apply plugin: 'com.jfrog.bintray'
+apply plugin: 'maven-publish'
 
-group='com.github.codepath'
+group='com.codepath.libraries'
+
+ext {
+    ARTIFACT = "asynchttpclient"
+    POM_NAME = "CodePath Async Http Client"
+    POM_DESC = "Async Http Client wrapper using OkHttp"
+    POM_SCM_URL = 'https://github.com/codepath/AsyncHttpClient'
+    BASE_VERSION = 1
+    VERSION_NAME = "0.1"
+}
+
+version = VERSION_NAME
+archivesBaseName = ARTIFACT
 
 android {
     compileSdkVersion 29
 
-
     defaultConfig {
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 1
-        versionName "1.0"
+        versionCode BASE_VERSION
+        versionName VERSION_NAME
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -35,4 +48,33 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+}
+
+bintray {
+    user = project.hasProperty('bintrayUser') ? project.property('bintrayUser') : System.getenv('BINTRAY_USER')
+    key = project.hasProperty('bintrayApiKey') ? project.property('bintrayApiKey') : System.getenv('BINTRAY_API_KEY')
+    configurations = ['archives']
+
+    pkg {
+        repo = 'maven'
+        name = 'asynchttpclient'
+        userOrg = 'codepath'
+        licenses = ['Apache-2.0']
+        vcsUrl = POM_SCM_URL
+        version {
+            name = BASE_VERSION
+            desc = POM_NAME
+            released = new Date()
+        }
+    }
+
+}
+
+task sourcesJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    archiveClassifier.set("sources")
+}
+
+artifacts {
+    archives sourcesJar
 }
