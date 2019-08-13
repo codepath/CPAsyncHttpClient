@@ -27,7 +27,7 @@ public class AsyncHttpClient {
     }
 
     protected Request.Builder createBuilderWithHeaders(
-            String url, @Nullable Headers requestHeaders) {
+            String url, @Nullable RequestHeaders requestHeaders) {
         Request.Builder requestBuilder = new Request.Builder().url(url);
 
         if (requestHeaders != null) {
@@ -38,18 +38,23 @@ public class AsyncHttpClient {
         return requestBuilder;
     }
 
-    public void get(String url, RequestParams requestParams, AbsCallback callback) {
-        this.get(url, null, requestParams, callback);
-    }
-
-    public void get(String url, Headers requestHeaders, @Nullable RequestParams<String, String> requestParams, AbsCallback callback) {
+    protected String createUrlWithRequestParams(String url, RequestParams<String, String>  requestParams) {
         if (requestParams != null) {
             HttpUrl.Builder httpBuider = HttpUrl.parse(url).newBuilder();
             for (Map.Entry<String, String> param : requestParams.entrySet()) {
                 httpBuider.addQueryParameter(param.getKey(), param.getValue());
             }
-                url = httpBuider.build().toString();
+            url = httpBuider.build().toString();
         }
+        return url;
+    }
+
+    public void get(String url, RequestParams<String, String>  requestParams, AbsCallback callback) {
+        this.get(url, null, requestParams, callback);
+    }
+
+    public void get(String url, RequestHeaders requestHeaders, @Nullable RequestParams<String, String> requestParams, AbsCallback callback) {
+        url = createUrlWithRequestParams(url, requestParams);
 
         Request.Builder requestBuilder = createBuilderWithHeaders(url, requestHeaders);
         Request request = requestBuilder.build();
@@ -61,7 +66,9 @@ public class AsyncHttpClient {
         get(url, null, callback);
     }
 
-    public void post(String url, Headers requestHeaders, String body, AbsCallback callback) {
+    public void post(String url, RequestParams requestParams, RequestHeaders requestHeaders, String body, AbsCallback callback) {
+        url = createUrlWithRequestParams(url, requestParams);
+
         Request.Builder requestBuilder = createBuilderWithHeaders(url, requestHeaders);
 
         RequestBody requestBody = RequestBody.create(MEDIA_TYPE_JSON, body);
@@ -70,8 +77,7 @@ public class AsyncHttpClient {
         okHttpClient.newCall(request).enqueue(callback);
     }
 
-
-    public void post(String url, Headers requestHeaders, File file, AbsCallback callback) {
+    public void post(String url, RequestParams requestParams, RequestHeaders requestHeaders, File file, AbsCallback callback) {
         Request.Builder requestBuilder = createBuilderWithHeaders(url, requestHeaders);
 
         RequestBody requestBody = RequestBody.create(MEDIA_TYPE_JSON, file);
@@ -80,7 +86,23 @@ public class AsyncHttpClient {
         okHttpClient.newCall(request).enqueue(callback);
     }
 
-    public void delete(String url, Headers requestHeaders, String body, AbsCallback callback) {
+    public void post(String url, String body, AbsCallback callback) {
+        this.post(url, null, null, body, callback);
+    }
+
+    public void post(String url, File body, AbsCallback callback) {
+        this.post(url, null, null, body, callback);
+    }
+
+    public void post(String url, RequestHeaders requestHeaders, String body, AbsCallback callback) {
+        this.post(url, null, requestHeaders, body, callback);
+    }
+
+    public void post(String url, RequestHeaders requestHeaders, File body, AbsCallback callback) {
+        this.post(url, null, requestHeaders, body, callback);
+    }
+
+    public void delete(String url, RequestHeaders requestHeaders, String body, AbsCallback callback) {
         Request.Builder requestBuilder = createBuilderWithHeaders(url, requestHeaders);
 
         RequestBody requestBody = RequestBody.create(MEDIA_TYPE_JSON, body);
@@ -89,7 +111,7 @@ public class AsyncHttpClient {
         okHttpClient.newCall(request).enqueue(callback);
     }
 
-    public void patch(String url, Headers requestHeaders, String body, AbsCallback callback) {
+    public void patch(String url, RequestHeaders requestHeaders, String body, AbsCallback callback) {
         Request.Builder requestBuilder = createBuilderWithHeaders(url, requestHeaders);
 
         RequestBody requestBody = RequestBody.create(MEDIA_TYPE_JSON, body);

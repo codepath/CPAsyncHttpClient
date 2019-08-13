@@ -2,5 +2,5 @@ package com.codepath.asynchttpclient;
 
 import java.util.HashMap;
 
-public class Headers extends HashMap<String, String> {
+public class RequestHeaders extends HashMap<String, String> {
 }
