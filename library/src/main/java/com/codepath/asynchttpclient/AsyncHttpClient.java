@@ -3,7 +3,6 @@ package com.codepath.asynchttpclient;
 import androidx.annotation.Nullable;
 
 import java.io.File;
-import java.util.HashMap;
 import java.util.Map;
 
 import okhttp3.HttpUrl;
@@ -28,7 +27,7 @@ public class AsyncHttpClient {
     }
 
     protected Request.Builder createBuilderWithHeaders(
-            String url, @Nullable HashMap<String, String> requestHeaders) {
+            String url, @Nullable Headers requestHeaders) {
         Request.Builder requestBuilder = new Request.Builder().url(url);
 
         if (requestHeaders != null) {
@@ -43,7 +42,7 @@ public class AsyncHttpClient {
         this.get(url, null, requestParams, callback);
     }
 
-    public void get(String url, HashMap<String, String> requestHeaders, @Nullable RequestParams<String, String> requestParams, AbsCallback callback) {
+    public void get(String url, Headers requestHeaders, @Nullable RequestParams<String, String> requestParams, AbsCallback callback) {
         if (requestParams != null) {
             HttpUrl.Builder httpBuider = HttpUrl.parse(url).newBuilder();
             for (Map.Entry<String, String> param : requestParams.entrySet()) {
@@ -62,7 +61,7 @@ public class AsyncHttpClient {
         get(url, null, callback);
     }
 
-    public void post(String url, HashMap<String, String> requestHeaders, String body, AbsCallback callback) {
+    public void post(String url, Headers requestHeaders, String body, AbsCallback callback) {
         Request.Builder requestBuilder = createBuilderWithHeaders(url, requestHeaders);
 
         RequestBody requestBody = RequestBody.create(MEDIA_TYPE_JSON, body);
@@ -72,7 +71,7 @@ public class AsyncHttpClient {
     }
 
 
-    public void post(String url, HashMap<String, String> requestHeaders, File file, AbsCallback callback) {
+    public void post(String url, Headers requestHeaders, File file, AbsCallback callback) {
         Request.Builder requestBuilder = createBuilderWithHeaders(url, requestHeaders);
 
         RequestBody requestBody = RequestBody.create(MEDIA_TYPE_JSON, file);
@@ -81,7 +80,7 @@ public class AsyncHttpClient {
         okHttpClient.newCall(request).enqueue(callback);
     }
 
-    public void delete(String url, HashMap<String, String> requestHeaders, String body, AbsCallback callback) {
+    public void delete(String url, Headers requestHeaders, String body, AbsCallback callback) {
         Request.Builder requestBuilder = createBuilderWithHeaders(url, requestHeaders);
 
         RequestBody requestBody = RequestBody.create(MEDIA_TYPE_JSON, body);
@@ -90,7 +89,7 @@ public class AsyncHttpClient {
         okHttpClient.newCall(request).enqueue(callback);
     }
 
-    public void patch(String url, HashMap<String, String> requestHeaders, String body, AbsCallback callback) {
+    public void patch(String url, Headers requestHeaders, String body, AbsCallback callback) {
         Request.Builder requestBuilder = createBuilderWithHeaders(url, requestHeaders);
 
         RequestBody requestBody = RequestBody.create(MEDIA_TYPE_JSON, body);
