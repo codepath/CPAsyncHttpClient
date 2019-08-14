@@ -38,7 +38,7 @@ public class AsyncHttpClient {
         return requestBuilder;
     }
 
-    protected String createUrlWithRequestParams(String url, RequestParams<String, String>  requestParams) {
+    protected String createUrlWithRequestParams(String url, RequestParams requestParams) {
         if (requestParams != null) {
             HttpUrl.Builder httpBuider = HttpUrl.parse(url).newBuilder();
             for (Map.Entry<String, String> param : requestParams.entrySet()) {
@@ -49,11 +49,11 @@ public class AsyncHttpClient {
         return url;
     }
 
-    public void get(String url, RequestParams<String, String>  requestParams, AbsCallback callback) {
+    public void get(String url, RequestParams requestParams, AbsCallback callback) {
         this.get(url, null, requestParams, callback);
     }
 
-    public void get(String url, RequestHeaders requestHeaders, @Nullable RequestParams<String, String> requestParams, AbsCallback callback) {
+    public void get(String url, RequestHeaders requestHeaders, @Nullable RequestParams requestParams, AbsCallback callback) {
         url = createUrlWithRequestParams(url, requestParams);
 
         Request.Builder requestBuilder = createBuilderWithHeaders(url, requestHeaders);
@@ -94,12 +94,12 @@ public class AsyncHttpClient {
         this.post(url, null, null, body, callback);
     }
 
-    public void post(String url, RequestHeaders requestHeaders, String body, AbsCallback callback) {
-        this.post(url, null, requestHeaders, body, callback);
+    public void post(String url, RequestParams requestParams, String body, AbsCallback callback) {
+        this.post(url, requestParams, null, body, callback);
     }
 
-    public void post(String url, RequestHeaders requestHeaders, File body, AbsCallback callback) {
-        this.post(url, null, requestHeaders, body, callback);
+    public void post(String url, RequestParams requestParams, File body, AbsCallback callback) {
+        this.post(url, requestParams, null, body, callback);
     }
 
     public void delete(String url, RequestHeaders requestHeaders, String body, AbsCallback callback) {

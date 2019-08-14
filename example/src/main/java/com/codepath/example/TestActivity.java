@@ -8,11 +8,11 @@ import android.util.Log;
 import android.view.View;
 
 import com.codepath.asynchttpclient.AsyncHttpClient;
+import com.codepath.asynchttpclient.RequestHeaders;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 import com.codepath.asynchttpclient.callback.TextHttpResponseHandler;
 
 import okhttp3.Headers;
-import okhttp3.ResponseBody;
 
 public class TestActivity extends AppCompatActivity {
 
