@@ -45,7 +45,7 @@ public class TestActivity extends AppCompatActivity {
         client.get("https://api.thecatapi.com/v1/images/search", params, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Headers headers, JSON json) {
-                Log.d("DEBUG", json.toString());
+                Log.d("DEBUG", json.jsonArray.toString());
 
             }
 

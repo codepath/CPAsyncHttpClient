@@ -2,6 +2,8 @@ package com.codepath.asynchttpclient;
 
 import androidx.annotation.Nullable;
 
+import com.facebook.stetho.okhttp3.StethoInterceptor;
+
 import java.io.File;
 import java.util.Map;
 
@@ -19,7 +21,9 @@ public class AsyncHttpClient {
     public static MediaType MEDIA_TYPE_JSON = MediaType.parse("application/json");
 
     public AsyncHttpClient() {
-        okHttpClient = new OkHttpClient.Builder().build();
+        okHttpClient = new OkHttpClient.Builder()
+                .addNetworkInterceptor(new StethoInterceptor())
+                .build();
     }
 
     public AsyncHttpClient(OkHttpClient client) {
