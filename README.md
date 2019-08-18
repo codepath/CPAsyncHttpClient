@@ -13,18 +13,33 @@ dependencies {
 
 ## Basic usage
 
-GET:
+1. Please check to make sure all network calls are using `https://` instead of `http://`!
 
-```java
-AsyncHttpClient cp = new AsyncHttpClient();
-cp.get("https://api.thecatapi.com/v1/images/search", new TextHttpResponseHandler() {
-  @Override
-   public void onSuccess(int statusCode, Headers headers, String response) {
-     Log.d("DEBUG", response);
-   }
+2. Verify that network access is allowed via the `<uses-permission>`:
 
-   @Override
-   public void onFailure(int statusCode, @Nullable Headers headers, String errorResponse, @Nullable Throwable throwable) {
-   }
-});
-```
+    ```xml
+    <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+                 package="com.codepath.example">
+       
+           <uses-permission android:name="android.permission.INTERNET" />```
+    ```
+
+3. Add API calls.
+   
+   ```java
+   
+   AsyncHttpClient client = new AsyncHttpClient();
+   client.get("https://api.thecatapi.com/v1/images/search", new TextHttpResponseHandler() {
+       @Override
+       public void onSuccess(int statusCode, Headers headers, String response) {
+           Log.d("DEBUG", response);
+       }
+ 
+       @Override
+       public void onFailure(int statusCode, @Nullable Headers headers, String errorResponse, @Nullable Throwable throwable) {
+           Log.d("DEBUG", errorResponse);
+       }
+   });
+   ```
+   
+   See [example calls](https://github.com/codepath/AsyncHttpClient/blob/master/example/src/main/java/com/codepath/example/TestActivity.java):
