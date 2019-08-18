@@ -20,6 +20,8 @@ import okhttp3.ResponseBody;
 
 public abstract class JsonHttpResponseHandler implements AbsCallback {
 
+    private static int INTERNAL_ERROR = 500;
+
     public abstract void onSuccess(int statusCode, Headers headers, JSON json);
 
     public abstract void onFailure(int statusCode, Headers headers, String response, Throwable throwable);
@@ -39,7 +41,7 @@ public abstract class JsonHttpResponseHandler implements AbsCallback {
 
     @Override
     public void onFailure(@NotNull Call call, @NotNull IOException e) {
-
+        this.onFailure(INTERNAL_ERROR, null, e.toString(), e);
     }
 
     @Override

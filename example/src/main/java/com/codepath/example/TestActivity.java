@@ -9,6 +9,7 @@ import android.view.View;
 
 import com.codepath.asynchttpclient.AsyncHttpClient;
 import com.codepath.asynchttpclient.RequestHeaders;
+import com.codepath.asynchttpclient.RequestParams;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 import com.codepath.asynchttpclient.callback.TextHttpResponseHandler;
 
@@ -24,7 +25,10 @@ public class TestActivity extends AppCompatActivity {
 
     public void onTest(View view) {
         AsyncHttpClient cp = new AsyncHttpClient();
-        cp.get("https://api.thecatapi.com/v1/images/search", new TextHttpResponseHandler() {
+        RequestParams params = new RequestParams();
+        params.put("q", "codepath");
+
+        cp.get("http://www.google.com/search", params, new TextHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Headers headers, String response) {
                 Log.d("DEBUG", response);
@@ -32,7 +36,7 @@ public class TestActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(int statusCode, @Nullable Headers headers, String errorResponse, @Nullable Throwable throwable) {
-
+                Log.d("DEBUG", errorResponse);
             }
         });
 

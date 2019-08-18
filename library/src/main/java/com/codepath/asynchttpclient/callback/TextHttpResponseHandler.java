@@ -18,12 +18,14 @@ import okhttp3.ResponseBody;
 
 public abstract class TextHttpResponseHandler implements AbsCallback {
 
+    private static int INTERNAL_ERROR = 500;
+
     public TextHttpResponseHandler() {
     }
 
     @Override
     public void onFailure(@NotNull Call call, @NotNull IOException e) {
-
+        this.onFailure(INTERNAL_ERROR, null, e.toString(), e);
     }
 
     @Override
@@ -59,7 +61,7 @@ public abstract class TextHttpResponseHandler implements AbsCallback {
             // run on main thread to keep things simple
             new Handler(Looper.getMainLooper()).post(runnable);
         } catch (IOException e) {
-            handler.onFailure(500, null, "", e);
+            handler.onFailure(INTERNAL_ERROR, null, e.toString(), e);
         }
     }
 
