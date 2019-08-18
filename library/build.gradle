@@ -11,7 +11,7 @@ ext {
     POM_DESC = "Async Http Client wrapper using OkHttp"
     POM_SCM_URL = 'https://github.com/codepath/AsyncHttpClient'
     BASE_VERSION = 1
-    VERSION_NAME = "0.0.5"
+    VERSION_NAME = "0.0.6"
 }
 
 version = VERSION_NAME
