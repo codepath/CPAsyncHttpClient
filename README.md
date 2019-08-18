@@ -5,8 +5,6 @@ Lightweight async HTTP client based on [OkHttp](https://square.github.io/okhttp/
 
 ## Setup
 
-[ ![Download](https://api.bintray.com/packages/codepath/maven/asynchttpclient/images/download.svg) ](https://bintray.com/codepath/maven/asynchttpclient/_latestVersion)
-
 ```gradle
 dependencies {
   implementation 'com.codepath.libraries:asynchttpclient:0.0.6'
