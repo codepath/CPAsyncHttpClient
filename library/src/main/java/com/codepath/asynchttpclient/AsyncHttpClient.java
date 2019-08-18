@@ -86,6 +86,10 @@ public class AsyncHttpClient {
         okHttpClient.newCall(request).enqueue(callback);
     }
 
+    public void post(String url, AbsCallback callback) {
+        this.post(url, null, null, "", callback);
+    }
+
     public void post(String url, String body, AbsCallback callback) {
         this.post(url, null, null, body, callback);
     }

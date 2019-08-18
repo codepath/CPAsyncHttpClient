@@ -49,7 +49,20 @@ public class TestActivity extends AppCompatActivity {
             }
         });
 
-        cp.post("https://api.thecatapi.com/v1/images/search", "", new JsonHttpResponseHandler() {
+        cp.post("https://api.thecatapi.com/v1/images/search", new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Headers headers, JSON json) {
+                Log.d("DEBUG", json.toString());
+
+            }
+
+            @Override
+            public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+
+            }
+        });
+
+        cp.post("https://api.thecatapi.com/v1/images/search", "test", new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Headers headers, JSON json) {
                 Log.d("DEBUG", json.toString());
