@@ -51,8 +51,8 @@ dependencies {
    });
    ```
    
-   This example uses `TextHttpResponseHandler` which presents the response as raw text. We could use the `JsonHttpResponseHandler` instead to have the API response automatically parsed for us into JSON. See [other example calls here](https://github.com/codepath/AsyncHttpClient/blob/master/example/src/main/java/com/codepath/example/TestActivity.java).
-
-## More documentation
-
+   This example uses `TextHttpResponseHandler` which presents the response as raw text. We could use the `JsonHttpResponseHandler` instead to have the API response automatically parsed for us into JSON. See [other example calls here](https://github.com/codepath/AsyncHttpClient/blob/master/example/src/main/java/com/codepath/example/TestActivity.java). 
+   
 For more detailed usages, check out the [CodePath Async Http Client Guide](https://guides.codepath.com/android/Using-CodePath-Async-Http-Client).
+
+
