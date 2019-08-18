@@ -1,12 +1,32 @@
-# AsyncHttpClient lib
+# AsyncHttpClient library
 
-Lightweight async HTTP client based on [OkHttp](https://square.github.io/okhttp/).
+Lightweight async HTTP client based on [OkHttp](https://square.github.io/okhttp/).  It tries to follow a similar API inspired by this [library](https://github.com/android-async-http/android-async-http)
 
-## Releases
 
-Latest version at the moment is `0.0.5`. Add the following lines to your `build.gradle` dependencies:
+## Setup
 
+[ ![Download](https://api.bintray.com/packages/codepath/maven/asynchttpclient/images/download.svg) ](https://bintray.com/codepath/maven/asynchttpclient/_latestVersion)
+
+```gradle
+dependencies {
+  implementation 'com.codepath.libraries:asynchttpclient:0.0.6'
+}
 ```
-implementation 'com.codepath.libraries:asynchttpclient:0.0.5'
-```
 
+## Basic usage
+
+GET:
+
+```java
+AsyncHttpClient cp = new AsyncHttpClient();
+cp.get("https://api.thecatapi.com/v1/images/search", new TextHttpResponseHandler() {
+  @Override
+   public void onSuccess(int statusCode, Headers headers, String response) {
+     Log.d("DEBUG", response);
+   }
+
+   @Override
+   public void onFailure(int statusCode, @Nullable Headers headers, String errorResponse, @Nullable Throwable throwable) {
+   }
+});
+```
