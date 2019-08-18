@@ -7,7 +7,7 @@ Lightweight async HTTP client based on [OkHttp](https://square.github.io/okhttp/
 
 ```gradle
 dependencies {
-  implementation 'com.codepath.libraries:asynchttpclient:0.0.7'
+  implementation 'com.codepath.libraries:asynchttpclient:0.0.8'
 }
 ```
 
@@ -42,4 +42,4 @@ dependencies {
    });
    ```
    
-   See [example calls](https://github.com/codepath/AsyncHttpClient/blob/master/example/src/main/java/com/codepath/example/TestActivity.java):
+   See [example calls](https://github.com/codepath/AsyncHttpClient/blob/master/example/src/main/java/com/codepath/example/TestActivity.java)
