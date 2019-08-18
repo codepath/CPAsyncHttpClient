@@ -55,4 +55,4 @@ dependencies {
 
 ## More documentation
 
-For a more detailed usage, check out the [CodePath Async Http Client Guide](https://guides.codepath.com/android/Using-CodePath-Async-Http-Client)
+For more detailed usages, check out the [CodePath Async Http Client Guide](https://guides.codepath.com/android/Using-CodePath-Async-Http-Client).
