@@ -24,11 +24,9 @@ public class TestActivity extends AppCompatActivity {
     }
 
     public void onTest(View view) {
-        AsyncHttpClient cp = new AsyncHttpClient();
-        RequestParams params = new RequestParams();
-        params.put("q", "codepath");
-
-        cp.get("http://www.google.com/search", params, new TextHttpResponseHandler() {
+        AsyncHttpClient client = new AsyncHttpClient();
+        // Basic GET calls
+        client.get("https://api.thecatapi.com/v1/images/search", new TextHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Headers headers, String response) {
                 Log.d("DEBUG", response);
@@ -40,7 +38,11 @@ public class TestActivity extends AppCompatActivity {
             }
         });
 
-        cp.get("https://api.thecatapi.com/v1/images/search", new JsonHttpResponseHandler() {
+        RequestParams params = new RequestParams();
+        params.put("limit", "5");
+        params.put("page", 0);
+
+        client.get("https://api.thecatapi.com/v1/images/search", params, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Headers headers, JSON json) {
                 Log.d("DEBUG", json.toString());
@@ -53,7 +55,8 @@ public class TestActivity extends AppCompatActivity {
             }
         });
 
-        cp.post("https://api.thecatapi.com/v1/images/search", new JsonHttpResponseHandler() {
+
+        client.post("https://api.thecatapi.com/v1/images/search", new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Headers headers, JSON json) {
                 Log.d("DEBUG", json.toString());
@@ -66,7 +69,7 @@ public class TestActivity extends AppCompatActivity {
             }
         });
 
-        cp.post("https://api.thecatapi.com/v1/images/search", "test", new JsonHttpResponseHandler() {
+        client.post("https://api.thecatapi.com/v1/images/search", "test", new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Headers headers, JSON json) {
                 Log.d("DEBUG", json.toString());
