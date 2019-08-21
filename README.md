@@ -17,7 +17,7 @@ To use this library, add the following to your `.gradle` file:
 
 ```gradle
 dependencies {
-  implementation 'com.codepath.libraries:asynchttpclient:0.0.8'
+  implementation 'com.codepath.libraries:asynchttpclient:0.0.9'
 }
 ```
 

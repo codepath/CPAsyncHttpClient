@@ -13,7 +13,14 @@ import com.codepath.asynchttpclient.RequestParams;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 import com.codepath.asynchttpclient.callback.TextHttpResponseHandler;
 
+import java.io.IOException;
 import okhttp3.Headers;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import okio.BufferedSource;
+import okio.ByteString;
+import okio.Okio;
 
 public class TestActivity extends AppCompatActivity {
 
@@ -26,6 +33,8 @@ public class TestActivity extends AppCompatActivity {
     public void onTest(View view) {
         AsyncHttpClient client = new AsyncHttpClient();
         // Basic GET calls
+
+        // Sending no headers with API key
         client.get("https://api.thecatapi.com/v1/images/search", new TextHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Headers headers, String response) {
@@ -41,8 +50,10 @@ public class TestActivity extends AppCompatActivity {
         RequestParams params = new RequestParams();
         params.put("limit", "5");
         params.put("page", 0);
+        RequestHeaders requestHeaders = new RequestHeaders();
+        requestHeaders.put("x-api-key", BuildConfig.api_key);
 
-        client.get("https://api.thecatapi.com/v1/images/search", params, new JsonHttpResponseHandler() {
+        client.get("https://api.thecatapi.com/v1/images/search", requestHeaders, params, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Headers headers, JSON json) {
                 Log.d("DEBUG", json.jsonArray.toString());
@@ -51,23 +62,35 @@ public class TestActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
-
+                Log.d("DEBUG", response);
             }
         });
 
+        BufferedSource bufferedSource = Okio.buffer(Okio.source(getResources().openRawResource(R.raw.cat)));
+        try {
+            ByteString source = bufferedSource.readByteString();
+            RequestBody body = RequestBody.create(source.toByteArray(), MediaType.get("image/jpg"));
+            RequestBody requestBody = new MultipartBody.Builder()
+                    .setType(MultipartBody.FORM)
+                    .addFormDataPart("file", "cat.jpg", body)
+                    .build();
 
-        client.post("https://api.thecatapi.com/v1/images/search", new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Headers headers, JSON json) {
-                Log.d("DEBUG", json.toString());
+            client.post("https://api.thecatapi.com/v1/images/upload", requestHeaders, params, requestBody, new JsonHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Headers headers, JSON json) {
+                    Log.d("DEBUG", json.toString());
 
-            }
+                }
 
-            @Override
-            public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+                @Override
+                public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+                    Log.d("DEBUG", response);
+                }
+            });
+        }
+        catch (IOException e) {
 
-            }
-        });
+        }
 
         client.post("https://api.thecatapi.com/v1/images/search", "test", new JsonHttpResponseHandler() {
             @Override
@@ -78,7 +101,7 @@ public class TestActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
-
+                Log.d("DEBUG", response);
             }
         });
 
