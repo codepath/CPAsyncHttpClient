@@ -4,20 +4,30 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 
 import com.codepath.asynchttpclient.AsyncHttpClient;
 import com.codepath.asynchttpclient.RequestHeaders;
 import com.codepath.asynchttpclient.RequestParams;
+import com.codepath.asynchttpclient.callback.BinaryHttpResponseHandler;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 import com.codepath.asynchttpclient.callback.TextHttpResponseHandler;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+
 import okhttp3.Headers;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import okhttp3.Response;
 import okio.BufferedSource;
 import okio.ByteString;
 import okio.Okio;
@@ -92,11 +102,31 @@ public class TestActivity extends AppCompatActivity {
 
         }
 
-        client.post("https://api.thecatapi.com/v1/images/search", "test", new JsonHttpResponseHandler() {
+        client.get("https://cdn2.thecatapi.com/images/6eg.jpg", new BinaryHttpResponseHandler()  {
             @Override
-            public void onSuccess(int statusCode, Headers headers, JSON json) {
-                Log.d("DEBUG", json.toString());
+            public void onSuccess(int statusCode, Headers headers, Response response) {
+                try {
+                    // ~/Library/Android/sdk/platform-tools/adb pull /sdcard/Android/data/com.codepath.cpasynchttpclient/files/Pictures/TEST/test.jpg
+                    File mediaStorageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "TEST");
 
+                    // Create the storage directory if it does not exist
+                    if (!mediaStorageDir.exists() && !mediaStorageDir.mkdirs()){
+                        Log.d("DEBUG", "failed to create directory");
+                    }
+
+                    // Return the file target for the photo based on filename
+                    InputStream data = response.body().byteStream();
+                    File file = new File(mediaStorageDir.getPath() + File.separator + "test.jpg");
+                    FileOutputStream outputStream = new FileOutputStream(file);
+                    byte[] buffer = new byte[2048];
+                    int len;
+                    while ( (len = data.read(buffer)) != -1) {
+                        outputStream.write(buffer, 0, len);
+                    }
+                    Log.e("DEBUG", "done!");
+                } catch (IOException e) {
+                    Log.e("DEBUG", e.toString());
+                }
             }
 
             @Override

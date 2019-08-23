@@ -1,0 +1,76 @@
+package com.codepath.asynchttpclient.callback;
+
+import android.os.Handler;
+import android.os.Looper;
+
+import androidx.annotation.Nullable;
+
+import com.codepath.asynchttpclient.AbsCallback;
+
+import org.jetbrains.annotations.NotNull;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+
+import okhttp3.Call;
+import okhttp3.Headers;
+import okhttp3.Response;
+import okhttp3.ResponseBody;
+
+public abstract class BinaryHttpResponseHandler implements AbsCallback {
+
+    private static int INTERNAL_ERROR = 500;
+
+    public BinaryHttpResponseHandler() {
+    }
+
+    @Override
+    public void onFailure(@NotNull Call call, @NotNull IOException e) {
+        this.onFailure(INTERNAL_ERROR, null, e.toString(), e);
+    }
+
+    @Override
+    public void onResponse(@NotNull Call call, @NotNull final Response response)
+            throws IOException {
+
+        final BinaryHttpResponseHandler handler = this;
+
+        final int responseCode = response.code();
+        final Headers responseHeaders = response.headers();
+
+        Runnable runnable = null;
+
+        if (response.isSuccessful()) {
+            runnable = new Runnable() {
+                @Override
+                public void run() {
+                    handler.onSuccess(responseCode, responseHeaders, response);
+                }
+            };
+        } else {
+            try (final ResponseBody responseBody = response.body()) {
+
+                final String responseString = responseBody.string();
+                runnable = new Runnable() {
+                    @Override
+                    public void run() {
+                        handler.onFailure(responseCode, responseHeaders, responseString, null);
+                    }
+                };
+            } catch (IOException e) {
+                handler.onFailure(INTERNAL_ERROR, null, e.toString(), e);
+            }
+        }
+
+        // run on main thread to keep things simple
+        new Handler(Looper.getMainLooper()).post(runnable);
+
+    }
+
+    public abstract void onSuccess(int statusCode, Headers headers, Response response);
+
+    public abstract void onFailure(int statusCode, @Nullable Headers headers, String errorResponse, @Nullable Throwable throwable);
+
+}
+
