@@ -1,5 +1,5 @@
 apply plugin: 'com.android.library'
-apply plugin: 'com.github.dcendents.android-maven'
+apply plugin: 'maven-publish'
 apply plugin: 'com.jfrog.bintray'
 apply plugin: 'maven-publish'
 
@@ -10,19 +10,19 @@ ext {
     POM_NAME = "CodePath Async Http Client"
     POM_DESC = "Async Http Client wrapper using OkHttp"
     POM_SCM_URL = 'https://github.com/codepath/AsyncHttpClient'
-    BASE_VERSION = 1
-    VERSION_NAME = "0.1.0"
+    BASE_VERSION = 2
+    VERSION_NAME = "2.0.0"
 }
 
 version = VERSION_NAME
 archivesBaseName = ARTIFACT
 
 android {
-    compileSdkVersion 29
+    compileSdkVersion 30
 
     defaultConfig {
         minSdkVersion 21
-        targetSdkVersion 29
+        targetSdkVersion 30
         versionCode BASE_VERSION
         versionName VERSION_NAME
 
@@ -42,8 +42,8 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation 'androidx.appcompat:appcompat:1.0.2'
-    api "com.squareup.okhttp3:okhttp:4.0.1"
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    api "com.squareup.okhttp3:okhttp:4.5.0"
     api 'com.facebook.stetho:stetho-okhttp3:1.5.1'
 
     testImplementation 'junit:junit:4.12'
@@ -51,10 +51,30 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 }
 
+
+// Because the components are created only during the afterEvaluate phase, you must
+// configure your publications using the afterEvaluate() lifecycle method.
+afterEvaluate {
+    publishing {
+        publications {
+            // Creates a Maven publication called "release".
+            release(MavenPublication) {
+                // Applies the component for the release build variant.
+                from components.release
+
+                // You can then customize attributes of the publication as shown below.
+                groupId = group
+                artifactId = ARTIFACT
+                version = VERSION_NAME
+            }
+        }
+    }
+}
+
 bintray {
     user = project.hasProperty('bintrayUser') ? project.property('bintrayUser') : System.getenv('BINTRAY_USER')
     key = project.hasProperty('bintrayApiKey') ? project.property('bintrayApiKey') : System.getenv('BINTRAY_API_KEY')
-    configurations = ['archives']
+    publications = ['release']
 
     pkg {
         repo = 'maven'
@@ -69,13 +89,4 @@ bintray {
         }
     }
 
-}
-
-task sourcesJar(type: Jar) {
-    from android.sourceSets.main.java.srcDirs
-    archiveClassifier.set("sources")
-}
-
-artifacts {
-    archives sourcesJar
 }
