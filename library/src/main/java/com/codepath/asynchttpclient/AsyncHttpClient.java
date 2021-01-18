@@ -33,6 +33,11 @@ public class AsyncHttpClient {
         okHttpClient = client;
     }
 
+    // to support previous API
+    public void setTimeout(int timeout) {
+        okHttpClient.newBuilder().readTimeout(timeout, TimeUnit.SECONDS).connectTimeout(timeout, TimeUnit.SECONDS);
+    }
+
     public void setReadTimeout(int timeout) {
         okHttpClient.newBuilder().readTimeout(timeout, TimeUnit.SECONDS);
     }
