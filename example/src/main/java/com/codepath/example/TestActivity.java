@@ -57,6 +57,8 @@ public class TestActivity extends AppCompatActivity {
             }
         });
 
+        client.setReadTimeout(10);
+        client.setConnectTimeout(10);
         RequestParams params = new RequestParams();
         params.put("limit", "5");
         params.put("page", 0);

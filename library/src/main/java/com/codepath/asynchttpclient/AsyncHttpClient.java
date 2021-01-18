@@ -6,6 +6,7 @@ import com.facebook.stetho.okhttp3.StethoInterceptor;
 
 import java.io.File;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.HttpUrl;
 import okhttp3.MediaType;
@@ -30,6 +31,14 @@ public class AsyncHttpClient {
 
     public AsyncHttpClient(OkHttpClient client) {
         okHttpClient = client;
+    }
+
+    public void setReadTimeout(int timeout) {
+        okHttpClient.newBuilder().readTimeout(timeout, TimeUnit.SECONDS);
+    }
+
+    public void setConnectTimeout(int timeout) {
+        okHttpClient.newBuilder().connectTimeout(timeout, TimeUnit.SECONDS);
     }
 
     protected Request.Builder createBuilderWithHeaders(
