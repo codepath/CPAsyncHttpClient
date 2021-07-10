@@ -1,21 +1,28 @@
 apply plugin: 'com.android.library'
 apply plugin: 'maven-publish'
-apply plugin: 'com.jfrog.bintray'
-apply plugin: 'maven-publish'
+apply plugin: 'signing'
 
 group='com.codepath.libraries'
 
 ext {
-    ARTIFACT = "asynchttpclient"
+    POM_ARTIFACT_ID = "asynchttpclient"
     POM_NAME = "CodePath Async Http Client"
-    POM_DESC = "Async Http Client wrapper using OkHttp"
-    POM_SCM_URL = 'https://github.com/codepath/AsyncHttpClient'
+    POM_DESCRIPTION = "Async Http Client wrapper using OkHttp"
     BASE_VERSION = 2
-    VERSION_NAME = "2.1.1"
+    VERSION_NAME = "2.2.0"
+    GROUP = 'com.codepath.libraries'
+
+    POM_URL = "https://github.com/codepath/android-oauth-handler/"
+    POM_SCM_URL = 'https://github.com/codepath/AsyncHttpClient'
+
+    POM_LICENCE_NAME = "The Apache Software License, Version 2.0"
+    POM_LICENCE_URL = "http://www.apache.org/licenses/LICENSE-2.0.txt"
+
+    POM_DEVELOPER_ID = "codepath"
+    POM_DEVELOPER_NAME = "CodePath, Inc."
 }
 
 version = VERSION_NAME
-archivesBaseName = ARTIFACT
 
 android {
     compileSdkVersion 30
@@ -42,13 +49,13 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'androidx.appcompat:appcompat:1.3.0'
     api "com.squareup.okhttp3:okhttp:4.9.0"
     api 'com.facebook.stetho:stetho-okhttp3:1.5.1'
 
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test:runner:1.3.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    androidTestImplementation 'androidx.test:runner:1.4.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 }
 
 task androidSourcesJar(type: Jar) {
@@ -68,30 +75,54 @@ afterEvaluate {
                 artifact androidSourcesJar
 
                 // You can then customize attributes of the publication as shown below.
-                groupId = group
-                artifactId = ARTIFACT
+                groupId = GROUP
+                artifactId = POM_ARTIFACT_ID
                 version = VERSION_NAME
+
+                pom {
+                    name = POM_NAME
+                    url = POM_URL
+                    description = POM_DESCRIPTION
+                    licenses {
+                        license {
+                            name = POM_LICENCE_NAME
+                            url = POM_LICENCE_URL
+                        }
+                    }
+                    developers {
+                        developer {
+                            id = POM_DEVELOPER_ID
+                            name = POM_DEVELOPER_NAME
+                        }
+                    }
+                    scm {
+                        url = POM_SCM_URL
+                    }
+                }
+            }
+        }
+        repositories {
+            maven {
+                name = "Sonatype"
+                credentials {
+                    username = System.getenv('NEXUS_USERNAME')
+                    password = System.getenv('NEXUS_PASSWORD')
+                }
+                def releasesRepoUrl = 'https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/'
+                def snapshotsRepoUrl = 'https://s01.oss.sonatype.org/content/repositories/snapshots/'
+                url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+                setUrl(url)
             }
         }
     }
 }
 
-bintray {
-    user = project.hasProperty('bintrayUser') ? project.property('bintrayUser') : System.getenv('BINTRAY_USER')
-    key = project.hasProperty('bintrayApiKey') ? project.property('bintrayApiKey') : System.getenv('BINTRAY_API_KEY')
-    publications = ['release']
-
-    pkg {
-        repo = 'maven'
-        name = 'asynchttpclient'
-        userOrg = 'codepath'
-        licenses = ['Apache-2.0']
-        vcsUrl = POM_SCM_URL
-        version {
-            name = BASE_VERSION
-            desc = POM_NAME
-            released = new Date()
-        }
-    }
-
+signing {
+    // gpg on MacOS is the same as gpg2
+    // ln -s /usr/local/bin/gpg /usr/local/bin/gpg2
+    // Make sure to populate the variables in gradle.properties
+    // signing.gnupg.keyName=XXX
+    // signing.gnupg.passpharse
+    useGpgCmd()
+    sign(publishing.publications)
 }
